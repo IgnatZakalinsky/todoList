@@ -34,4 +34,35 @@ const reducer = (state = initialState, action) => {
     }
 };
 
+export const addTodoList = (todoList_s) => {
+    let action = {
+        type: ADD_TODO_LIST,
+        todoList_s: todoList_s
+    };
+    return action;
+};
+export const setTodoLists = (todoList_s) => {
+    let action = {
+        type: SET_TODO_LISTS,
+        todoList_s: todoList_s
+    };
+    return action;
+};
+export const addTask = (task, id) => {
+    let action = {
+        type: ADD_TASK,
+        id: id,
+        task: task
+    };
+    return action;
+};
+export const setTasks = (tasks, id) => {
+    let action = {
+        type: SET_TASKS,
+        id: id,
+        tasks: tasks
+    };
+    return action;
+};
+
 export default reducer;

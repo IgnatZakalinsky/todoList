@@ -5,6 +5,8 @@ import TodoListTasks from "./../components/TodoListTasks/TodoListTasks";
 import TodoListFooter from "./../components/footer/TodoListFooter";
 import {todoListAPI} from "../api/api";
 import {connect} from "react-redux";
+import ReduxTodoListView from "./ReduxTodoListView";
+import {addTask, setTasks} from "./reducer";
 
 class ReduxTodoList extends React.Component {
     state = {
@@ -31,7 +33,6 @@ class ReduxTodoList extends React.Component {
         todoListAPI.createTask(newText, this.props.id).then(res => {
             this.props.addTask(res.data.data.item, this.props.id);
         });
-
     };
     deleteShift = () => {
         let newTasks = this.state.tasks;
@@ -122,15 +123,10 @@ class ReduxTodoList extends React.Component {
 
         if (this.state.isFetching) return <img src={'https://vk.com/doc123795798_509829821'} alt={'preloader'}/>;
         return (
-            <div className="todoList">
-                <TodoListHeader AddTask={this.AddTask}
-                                delete={this.deleteShift}
-                                title={this.props.title}/>
-                <TodoListTasks tasks={fixedTasks.filter(this.taskFilter)}
-                               changeTitle={this.changeTitle}
-                               onTaskStatusChanged={this.onTaskStatusChanged}/>
-                <TodoListFooter filterValue={this.state.filterValue} onFilterChanged={this.onFilterChanged}/>
-            </div>
+            <ReduxTodoListView AddTask={this.AddTask} delete={this.deleteShift} title={this.props.title}
+                               tasks={fixedTasks.filter(this.taskFilter)} changeTitle={this.changeTitle}
+                               onTaskStatusChanged={this.onTaskStatusChanged} filterValue={this.state.filterValue}
+                               onFilterChanged={this.onFilterChanged}/>
         );
     }
 }
@@ -141,24 +137,26 @@ let mapStateToProps = (state) => {
     }
 };
 
-let mapDispatchToProps = (dispatch) => {
+/*let mapDispatchToProps = (dispatch) => {
     return {
         addTask: (task, id) => {
             let action = {
                 type: "ADD-TASK",
                 id: id,
-                task: task};
+                task: task
+            };
             dispatch(action);
         },
         setTasks: (tasks, id) => {
             let action = {
                 type: "SET-TASKS",
                 id: id,
-                tasks: tasks};
+                tasks: tasks
+            };
             dispatch(action);
         }
     }
-};
+};*/
 
-export default connect(mapStateToProps, mapDispatchToProps)(ReduxTodoList);
+export default connect(mapStateToProps, {addTask, setTasks})(ReduxTodoList);
 

@@ -1,9 +1,9 @@
 import React from 'react';
 import {connect} from "react-redux";
-import AddNewItemForm from "../components/common/AddNewItemForm";
-import TodoList from "../components/TodoList";
 import {todoListAPI} from "../api/api";
 import ReduxTodoList from "./ReduxTodoList";
+import ReduxAppView from "./ReduxAppView";
+import {addTodoList, setTodoLists} from "./reducer";
 
 class ReduxApp extends React.Component {
 
@@ -37,10 +37,7 @@ class ReduxApp extends React.Component {
         tasks={this.props.tasks[l.id]}/>);
 
         if (this.state.isFetching) return <img src={'https://vk.com/doc123795798_509829821'} alt={'preloader'}/>;
-        return <div>
-            <AddNewItemForm delete={this.props.delete} AddItem={this.addTodoList}/>
-            {todoList_s}
-        </div>
+        return <ReduxAppView delete={this.props.delete} addTodoList={this.addTodoList} todoList_s={todoList_s}/>
     }
 }
 
@@ -51,23 +48,11 @@ let mapStateToProps = (state) => {
     }
 };
 
-let mapDispatchToProps = (dispatch) => {
+/*let mapDispatchToProps = (dispatch) => {
     return {
-        addTodoList: (todoList_s) => {
-            let action = {
-                type: "ADD-TODO-LIST",
-                todoList_s: todoList_s
-            };
-            dispatch(action);
-        },
-        setTodoLists: (todoList_s) => {
-            let action = {
-                type: "SET-TODO-LISTS",
-                todoList_s: todoList_s
-            };
-            dispatch(action);
-        }
+        addTodoList: (todoList_s) => dispatch(addTodoList(todoList_s)),
+        setTodoLists: (todoList_s) => dispatch(setTodoLists(todoList_s))
     }
-};
+};*/
 
-export default connect(mapStateToProps, mapDispatchToProps)(ReduxApp);
+export default connect(mapStateToProps, {addTodoList, setTodoLists})(ReduxApp);
