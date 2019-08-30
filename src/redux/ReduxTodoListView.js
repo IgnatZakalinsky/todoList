@@ -8,9 +8,9 @@ const ReduxTodoListView = (props) => {
     return (
         <div className="todoList">
             <TodoListHeader AddTask={props.AddTask}
-                            delete={props.deleteShift}
+                            delete={props.delete}
                             title={props.title}/>
-            <TodoListTasks tasks={props.tasks}
+            <TodoListTasks tasks={props.tasks} deleteTask={props.deleteTask} id={props.id}
                            changeTitle={props.changeTitle}
                            onTaskStatusChanged={props.onTaskStatusChanged}/>
             <TodoListFooter filterValue={props.filterValue} onFilterChanged={props.onFilterChanged}/>

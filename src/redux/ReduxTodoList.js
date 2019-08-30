@@ -1,12 +1,8 @@
 import React from 'react';
 import './../App.css';
-import TodoListHeader from "./../components/header/TodoListHeader";
-import TodoListTasks from "./../components/TodoListTasks/TodoListTasks";
-import TodoListFooter from "./../components/footer/TodoListFooter";
-import {todoListAPI} from "../api/api";
 import {connect} from "react-redux";
 import ReduxTodoListView from "./ReduxTodoListView";
-import {addTask, setTasks} from "./reducer";
+import {addTask, createTask, deleteTask, getTasks, setTasks, updateTask} from "./reducer";
 
 class ReduxTodoList extends React.Component {
     state = {
@@ -30,11 +26,9 @@ class ReduxTodoList extends React.Component {
         }, () => this.saveState());
     };
     AddTask = (newText) => {
-        todoListAPI.createTask(newText, this.props.id).then(res => {
-            this.props.addTask(res.data.data.item, this.props.id);
-        });
+        this.props.createTask(newText, this.props.id);
     };
-    deleteShift = () => {
+    deleteShiftOld = () => {
         let newTasks = this.state.tasks;
         newTasks.pop();
 
@@ -76,20 +70,15 @@ class ReduxTodoList extends React.Component {
         //, () => this.saveState());
     };
     onTaskStatusChanged = (taskId, status) => {
-        const task = this.props.tasks.find(t => t.id === taskId);
-        todoListAPI.updateTask({...task, status: status}).then(res => {
-            console.log(res);
-            this.changeTasks(taskId, res.data.data.item)
-        });
-
-        //this.changeTasks(taskId, {isDone: isDone})
+        this.props.updateTask(this.props.tasks, taskId, {status}, this.props.id);
     };
     changeTitle = (taskId, title) => {
-        const task = this.props.tasks.find(t => t.id === taskId);
-        todoListAPI.updateTask({...task, title: title}).then(res => {
-            console.log(res);
-            this.changeTasks(taskId, res.data.data.item)
-        });
+        this.props.updateTask(this.props.tasks, taskId, {title}, this.props.id);
+        // const task = this.props.tasks.find(t => t.id === taskId);
+        // todoListAPI.updateTask({...task, title: title}).then(res => {
+        //     console.log(res);
+        //     this.changeTasks(taskId, res.data.data.item)
+        // });
     };
 
     saveState = () => {
@@ -106,12 +95,13 @@ class ReduxTodoList extends React.Component {
         this.setState(state, () => this.saveState());
     };
     restoreState = () => {
-        this.setState({isFetching: true});
+        this.props.getTasks(this.props.id);
+        /*this.setState({isFetching: true});
         todoListAPI.getTasks(this.props.id).then(res => {
             this.setState({isFetching: false});
             //this.props.setState({tasks: res.data.items, isFetching: false});
             this.props.setTasks(res.data.items, this.props.id);
-        });
+        });*/
     };
 
     componentDidMount() {
@@ -121,19 +111,22 @@ class ReduxTodoList extends React.Component {
     render = () => {
         let fixedTasks = this.props.tasks || [];
 
-        if (this.state.isFetching) return <img src={'https://vk.com/doc123795798_509829821'} alt={'preloader'}/>;
+        if (this.props.isFetchings[this.props.id]) return <img src={'https://vk.com/doc123795798_509829821'}
+                                                               alt={'preloader'}/>;
+
         return (
-            <ReduxTodoListView AddTask={this.AddTask} delete={this.deleteShift} title={this.props.title}
+            <ReduxTodoListView AddTask={this.AddTask} title={this.props.title} id={this.props.id}
+                               deleteTask={this.props.deleteTask}
                                tasks={fixedTasks.filter(this.taskFilter)} changeTitle={this.changeTitle}
                                onTaskStatusChanged={this.onTaskStatusChanged} filterValue={this.state.filterValue}
-                               onFilterChanged={this.onFilterChanged}/>
+                               onFilterChanged={this.onFilterChanged} delete={this.props.delete}/>
         );
     }
 }
 
 let mapStateToProps = (state) => {
     return {
-        //tasks: state.tasks[this.props.id]
+        isFetchings: state.isFetchings
     }
 };
 
@@ -158,5 +151,12 @@ let mapStateToProps = (state) => {
     }
 };*/
 
-export default connect(mapStateToProps, {addTask, setTasks})(ReduxTodoList);
+export default connect(mapStateToProps, {
+    addTask,
+    setTasks,
+    getTasks,
+    createTask,
+    updateTask,
+    deleteTask
+})(ReduxTodoList);
 

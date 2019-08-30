@@ -32,14 +32,13 @@ class AddNewItemForm extends React.Component {
 
     render = () => {
         return (
-            <div className="todoList-newTaskForm">
+            <div className={s.addItem}>
                 <input type="text" value={this.state.title}
                        className={this.state.error ? s.error : undefined}
                        onKeyPress={this.enter}
                        onChange={this.inputChange}
                        placeholder="New item name"/>
                 <button onClick={this.onAddItemClick}>Add</button>
-                <button onClick={this.props.delete}>delete endItem</button>
             </div>
         );
     }

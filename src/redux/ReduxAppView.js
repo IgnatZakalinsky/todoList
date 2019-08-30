@@ -1,10 +1,13 @@
 import React from 'react';
 import AddNewItemForm from "../components/common/AddNewItemForm";
+import s from "./ReduxAppView.module.css"
 
 const ReduxAppView = (props) => {
-    return <div>
-        <AddNewItemForm delete={props.delete} AddItem={props.addTodoList}/>
-        {props.todoList_s}
+    return <div className={s.main}>
+        <AddNewItemForm AddItem={props.addTodoList}/>
+        <div className={s.todoLists}>
+            {props.todoList_s}
+        </div>
     </div>
 };
 

@@ -1,0 +1,12 @@
+.main {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.main .todoLists {
+    display: flex;
+    flex-wrap: wrap;
+}

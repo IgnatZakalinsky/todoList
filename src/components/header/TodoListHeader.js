@@ -8,8 +8,8 @@ class TodoListHeader extends React.Component {
         return (
             <div className="todoList-header">
                 <h3 className="todoList-header__title">{this.props.title}</h3>
-                <AddNewItemForm delete={this.props.delete}
-                                AddItem={this.props.AddTask}/>
+                <button onClick={this.props.delete}>delete</button>
+                <AddNewItemForm AddItem={this.props.AddTask}/>
             </div>
         );
     }
